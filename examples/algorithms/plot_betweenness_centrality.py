@@ -66,7 +66,6 @@ for node in most_central_nodes:
     edgelist.extend(list(H.edges(node)))
 nx.draw_networkx_edges(H, pos=pos, edgelist=edgelist)
 
-
 # Title/legend
 font = {"color": "k", "fontweight": "bold", "fontsize": 16}
 ax.set_title(
@@ -76,10 +75,14 @@ ax.set_title(
 # Change font for inset text
 font["fontweight"] = None
 ax.text(
-    0.80,
+    0.60,
     0.06,
-    f"Bolded nodes & black edges highlight the {n} nodes with highest betweenness centrality",
-    horizontalalignment="center",
+    (
+        f"Bolded nodes & black edges highlight the {n} nodes\n"
+        "with highest betweenness centrality.\n"
+        "Nodes colored by degree."
+    ),
+    horizontalalignment="left",
     transform=ax.transAxes,
     fontdict=font,
 )
