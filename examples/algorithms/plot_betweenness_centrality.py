@@ -23,45 +23,62 @@ H = G.subgraph(largest_component)
 
 # compute centrality
 centrality = nx.betweenness_centrality(H, k=10, endpoints=True)
+central_nodes = sorted(centrality, key=centrality.get, reverse=True)
 
 #### draw graph ####
 fig, ax = plt.subplots(figsize=(20, 15))
 pos = nx.spring_layout(H, k=0.15, seed=4552321)
-node_color = [d * 10 for n, d in H.degree()]
-node_size = [v * 20000 for v in centrality.values()]
-# node_size = [d * 20000 for n, d in H.degree()]
-# node_color = [v * 10000 for v in centrality.values()]
+# Set color bounds
+deg = [d for _, d in H.degree()]
+vmin, vmax = min(deg), max(deg)
+
+# Plot largest connected component with low alpha as background
 nx.draw_networkx(
     H,
     pos=pos,
     with_labels=False,
+    node_size=10,
+    node_color=deg,
     cmap=plt.get_cmap("hot"),
-    node_color=node_color,
-    node_size=node_size,
+    vmin=vmin,
+    vmax=vmax,
     edge_color="gray",
-    alpha=0.4,
+    alpha=0.1,
 )
+# Highlight the n most central nodes
+n = 10
+most_central_nodes = central_nodes[:n]
+
+nx.draw_networkx_nodes(
+    H,
+    pos=pos,
+    nodelist=most_central_nodes,
+    node_size=50,
+    node_color=[d for _, d in H.degree(most_central_nodes)],
+    cmap=plt.get_cmap("hot"),
+    vmin=vmin,
+    vmax=vmax,
+    alpha=1.0,
+)
+# Highlight all edges connected to the n most central nodes
+edgelist = []
+for node in most_central_nodes:
+    edgelist.extend(list(H.edges(node)))
+nx.draw_networkx_edges(H, pos=pos, edgelist=edgelist)
+
 
 # Title/legend
 font = {"color": "k", "fontweight": "bold", "fontsize": 16}
 ax.set_title(
     "Gold standard data of positive gene functional associations (C. elegans)", font
 )
-# Change font color for legend
-font["color"] = "r"
 
-ax.text(
-    0.80,
-    0.10,
-    "node color = degree",
-    horizontalalignment="center",
-    transform=ax.transAxes,
-    fontdict=font,
-)
+# Change font for inset text
+font["fontweight"] = None
 ax.text(
     0.80,
     0.06,
-    "node size = betweeness centrality",
+    f"Bolded nodes & black edges highlight the {n} nodes with highest betweenness centrality",
     horizontalalignment="center",
     transform=ax.transAxes,
     fontdict=font,
