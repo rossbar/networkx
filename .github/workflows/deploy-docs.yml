@@ -57,11 +57,11 @@ jobs:
     # 3. Add private key as a secret to networkx/networkx repo
     #   - Settings -> Secrets -> New Repository Secret
     #   - Make sure the name is the same as below: CI_DEPLOY_KEY
-    - name: Install SSH agent
-      if: github.ref == 'refs/heads/master'
-      uses: webfactory/ssh-agent@v0.4.1
-      with:
-        ssh-private-key: ${{ secrets.CI_DEPLOY_KEY }}
+    #- name: Install SSH agent
+    #  if: github.ref == 'refs/heads/master'
+    #  uses: webfactory/ssh-agent@v0.4.1
+    #  with:
+    #    ssh-private-key: ${{ secrets.CI_DEPLOY_KEY }}
 
     - name: Build docs
       if: github.ref == 'refs/heads/master'
