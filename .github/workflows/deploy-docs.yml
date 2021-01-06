@@ -28,9 +28,12 @@ jobs:
         sudo apt-get install libgeos-dev libproj-dev
         sudo apt-get install libspatialindex-dev
 
-    - name: Mayavi setup
+    - name: Mayavi dependencies
       run: |
         sudo apt-get --no-install-recommends install -y libxkbcommon-x11-0 optipng libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 xcb libxcb-xfixes0 libxcb-xinerama0 libxcb-shape0
+
+    - name: Headless mayavi setup
+    - run: |
         export DISPLAY=:99
         /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1400x200x24 -ac +extension GLX +render -noreset;
 
