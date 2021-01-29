@@ -223,9 +223,10 @@ def test_deprecation_warnings(pagerank_alg):
         pr = pagerank_alg(G, alpha=0.9)
 
 
-def test_pagerank(benchmark):
+@pytest.mark.parametrize("num_nodes", (10, 100, 1000))
+def test_pagerank(benchmark, num_nodes):
     """
     Benchmark for the pagerank algorithm.
     """
-    G = nx.complete_graph(25)
+    G = nx.complete_graph(num_nodes)
     benchmark(nx.pagerank, G)
