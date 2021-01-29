@@ -221,3 +221,11 @@ def test_deprecation_warnings(pagerank_alg):
     G = nx.DiGraph(nx.path_graph(4))
     with pytest.warns(DeprecationWarning):
         pr = pagerank_alg(G, alpha=0.9)
+
+
+def test_pagerank(benchmark):
+    """
+    Benchmark for the pagerank algorithm.
+    """
+    G = nx.complete_graph(25)
+    benchmark(nx.pagerank, G)
