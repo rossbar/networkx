@@ -223,17 +223,17 @@ def test_deprecation_warnings(pagerank_alg):
         pr = pagerank_alg(G, alpha=0.9)
 
 
-@pytest.mark.parametrize("num_nodes", (10, 100, 1000))
-@pytest.mark.parametrize("density", (0.1, 0.3, 0.8, 1.0))
-def test_pagerank(benchmark, num_nodes, density):
+@pytest.fixture(params=[10, 100, 1000])
+def num_nodes(benchmark, request):
+    benchmark.group = f"{request.param} - perf"
+    return request.param
+
+
+def test_pagerank(benchmark, num_nodes):
     """
     Benchmark for the pagerank algorithm.
     """
-    # Generate graph with varying numbers of nodes and edges
-    adj = np.zeros((num_nodes, num_nodes), dtype=np.int)
-    mask = np.random.random_sample((num_nodes, num_nodes))
-    adj[mask < density] = 1
-    adj[np.diag_indices(num_nodes)] = 0
-    G = nx.from_numpy_array(adj)
+
+    G = nx.complete_graph(num_nodes)
 
     benchmark(nx.pagerank, G)
