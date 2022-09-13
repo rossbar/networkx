@@ -11,7 +11,7 @@ NetworkX
    :target: https://github.com/networkx/networkx/issues?q=is%3Aopen+is%3Aissue+label%3A%22Good+First+Issue%22
    
 
-NetworkX is a PPython package for the creation, manipulation,
+NetworkX is a Python package for the creation, manipulation,
 and study of the structure, dynamics, and functions
 of complex networks.
 
