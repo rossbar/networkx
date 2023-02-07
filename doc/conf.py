@@ -247,7 +247,6 @@ numpydoc_use_plots = True
 
 plot_pre_code = """
 import networkx as nx
-np.random.seed(0)
 """
 
 plot_include_source = True
