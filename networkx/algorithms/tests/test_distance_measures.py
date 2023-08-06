@@ -1,3 +1,4 @@
+import string
 from random import Random
 
 import pytest
@@ -13,15 +14,29 @@ def test__extrema_bounding_invalid_compute_kwarg():
         _extrema_bounding(G, compute="spam")
 
 
+@pytest.fixture(params=["2-tuples as nodes", "ints as nodes", "strs as nodes"])
+def grid_graph_and_first_node(request):
+    """4x4 grid-graph."""
+    G = nx.grid_2d_graph(4, 4)
+    if request.param == "2-tuples as nodes":
+        yield G, (0, 0)
+    if request.param == "ints as nodes":
+        yield nx.convert_node_labels_to_integers(G, first_label=1, ordering="sorted"), 1
+    if request.param == "strs as nodes":
+        t2s = dict(zip(G.nodes, string.ascii_lowercase))
+        yield nx.relabel_nodes(G, t2s), t2s[(0, 0)]
+
+
 class TestDistance:
     def setup_method(self):
         G = cnlti(nx.grid_2d_graph(4, 4), first_label=1, ordering="sorted")
         self.G = G
 
-    def test_eccentricity(self):
-        assert nx.eccentricity(self.G, 1) == 6
-        e = nx.eccentricity(self.G)
-        assert e[1] == 6
+    def test_eccentricity(self, grid_graph_and_first_node):
+        G, n = grid_graph_and_first_node
+        assert nx.eccentricity(G, n) == 6
+        e = nx.eccentricity(G)
+        assert e[n] == 6
 
         sp = dict(nx.shortest_path_length(self.G))
         e = nx.eccentricity(self.G, sp=sp)
