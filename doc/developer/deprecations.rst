@@ -70,3 +70,4 @@ Version 3.5
   to return a dict. See #6527
 * Change ``shortest_path`` in ``algorithms/shortest_path/generic.py``
   to return a iterator. See #6527
+* Remove ``reverse_cuthill_mckee_ordering`` from ``utils/rcm.py``

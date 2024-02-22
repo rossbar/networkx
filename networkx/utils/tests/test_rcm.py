@@ -1,3 +1,5 @@
+import pytest
+
 import networkx as nx
 from networkx.utils import reverse_cuthill_mckee_ordering
 
@@ -23,8 +25,13 @@ def test_reverse_cuthill_mckee():
             (6, 7),
         ]
     )
-    rcm = list(reverse_cuthill_mckee_ordering(G))
+    # Delete between lines when deprecation expires---------------------
+    with pytest.deprecated_call():
+        rcm = list(reverse_cuthill_mckee_ordering(G))
     assert rcm in [[0, 8, 5, 7, 3, 6, 2, 4, 1, 9], [0, 8, 5, 7, 3, 6, 4, 2, 1, 9]]
+    # ------------------------------------------------------------------
+    rcm = reversed(list(nx.utils.cuthill_mckee_ordering(G)))
+    assert list(rcm) in [[0, 8, 5, 7, 3, 6, 2, 4, 1, 9], [0, 8, 5, 7, 3, 6, 4, 2, 1, 9]]
 
 
 def test_rcm_alternate_heuristic():
@@ -59,5 +66,10 @@ def test_rcm_alternate_heuristic():
         deg, node = min((d, n) for n, d in G.degree())
         return node
 
-    rcm = list(reverse_cuthill_mckee_ordering(G, heuristic=smallest_degree))
+    # Delete between lines when deprecation expires---------------------
+    with pytest.deprecated_call():
+        rcm = list(reverse_cuthill_mckee_ordering(G, heuristic=smallest_degree))
     assert rcm in answers
+    # ------------------------------------------------------------------
+    rcm = reversed(list(nx.utils.cuthill_mckee_ordering(G, heuristic=smallest_degree)))
+    assert list(rcm) in answers

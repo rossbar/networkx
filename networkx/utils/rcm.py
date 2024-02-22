@@ -72,6 +72,13 @@ def reverse_cuthill_mckee_ordering(G, heuristic=None):
     """Generate an ordering (permutation) of the graph nodes to make
     a sparse matrix.
 
+    .. deprecated:: 3.3
+
+       reverse_cuthill_mckee_ordering is deprecated and will be removed in
+       version 3.5. Used the `reversed` function on `cuthill_mckee_ordering` instead::
+
+           reversed(list(cuthill_mckee_ordering(G, heuristic=heuristic)))
+
     Uses the reverse Cuthill-McKee heuristic (based on breadth-first search)
     [1]_.
 
@@ -121,6 +128,16 @@ def reverse_cuthill_mckee_ordering(G, heuristic=None):
     .. [2]  Steven S. Skiena. 1997. The Algorithm Design Manual.
        Springer-Verlag New York, Inc., New York, NY, USA.
     """
+    import warnings
+
+    warnings.warn(
+        (
+            "reverse_cuthill_mckee_ordering is deprecated and will be removed in\n"
+            "version 3.5. Use `reversed(list(cuthill_mckee_ordering(G)))` instead."
+        ),
+        category=DeprecationWarning,
+        stacklevel=2,
+    )
     return reversed(list(cuthill_mckee_ordering(G, heuristic=heuristic)))
 
 
