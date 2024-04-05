@@ -294,7 +294,7 @@ def eccentricity(G, v=None, sp=None, weight=None):
     #        nodes=G.nodes()
     #    elif v in G:               # is v a single node
     #        nodes=[v]
-    #    else:                      # assume v is a container of nodes
+    #    else:                      # assume v is an iterable of nodes
     #        nodes=v
     order = G.order()
     e = {}
