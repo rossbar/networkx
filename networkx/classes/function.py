@@ -247,8 +247,8 @@ def add_star(G_to_add_to, nodes_for_star, **attr):
     ----------
     G_to_add_to : graph
         A NetworkX graph
-    nodes_for_star : iterable container
-        A container of nodes.
+    nodes_for_star : iterable
+        An iterable of nodes.
     attr : keyword arguments, optional (default= no attributes)
         Attributes to add to every edge in star.
 
@@ -279,8 +279,8 @@ def add_path(G_to_add_to, nodes_for_path, **attr):
     ----------
     G_to_add_to : graph
         A NetworkX graph
-    nodes_for_path : iterable container
-        A container of nodes.  A path will be constructed from
+    nodes_for_path : iterable
+        An iterable of nodes.  A path will be constructed from
         the nodes (in order) and added to the graph.
     attr : keyword arguments, optional (default= no attributes)
         Attributes to add to every edge in path.
@@ -311,8 +311,8 @@ def add_cycle(G_to_add_to, nodes_for_cycle, **attr):
     ----------
     G_to_add_to : graph
         A NetworkX graph
-    nodes_for_cycle: iterable container
-        A container of nodes.  A cycle will be constructed from
+    nodes_for_cycle: iterable
+        A iterable of nodes.  A cycle will be constructed from
         the nodes (in order) and added to the graph.
     attr : keyword arguments, optional (default= no attributes)
         Attributes to add to every edge in cycle.
@@ -346,13 +346,10 @@ def subgraph(G, nbunch):
     G : graph
        A NetworkX graph
 
-    nbunch : list, iterable
-       A container of nodes that will be iterated through once (thus
-       it should be an iterator or be iterable).  Each element of the
-       container should be a valid node type: any hashable type except
-       None.  If nbunch is None, return all edges data in the graph.
-       Nodes in nbunch that are not in the graph will be (quietly)
-       ignored.
+    nbunch : iterable
+       An iterable of nodes. Each element of the iterable should be a valid
+       node type: any hashable type except `None`. If `nbunch` is `None`, return
+       a copy of `G`. Nodes in `nbunch` that are not in the graph will be (quietly) ignored.
 
     Notes
     -----
@@ -370,7 +367,7 @@ def induced_subgraph(G, nbunch):
     Parameters
     ----------
     G : NetworkX Graph
-    nbunch : node, container of nodes or None (for all nodes)
+    nbunch : node, iterable of nodes, or None (for all nodes)
 
     Returns
     -------
