@@ -69,12 +69,10 @@ def hopcroft_karp_matching(G, top_nodes=None):
     Parameters
     ----------
     G : NetworkX graph
-
       Undirected bipartite graph
 
-    top_nodes : container of nodes
-
-      Container with all nodes in one bipartite node set. If not supplied
+    top_nodes : iterable of nodes
+      Iterable with all nodes in one bipartite node set. If not supplied
       it will be computed. But if more than one solution exists an exception
       will be raised.
 
@@ -89,7 +87,7 @@ def hopcroft_karp_matching(G, top_nodes=None):
     Raises
     ------
     AmbiguousSolution
-      Raised if the input bipartite graph is disconnected and no container
+      Raised if the input bipartite graph is disconnected and no iterable
       with all nodes in one bipartite set is provided. When determining
       the nodes in each bipartite set more than one valid solution is
       possible if the input graph is disconnected.
@@ -188,12 +186,10 @@ def eppstein_matching(G, top_nodes=None):
     Parameters
     ----------
     G : NetworkX graph
-
       Undirected bipartite graph
 
-    top_nodes : container
-
-      Container with all nodes in one bipartite node set. If not supplied
+    top_nodes : iterable
+      Iterable with all nodes in one bipartite node set. If not supplied
       it will be computed. But if more than one solution exists an exception
       will be raised.
 
@@ -208,7 +204,7 @@ def eppstein_matching(G, top_nodes=None):
     Raises
     ------
     AmbiguousSolution
-      Raised if the input bipartite graph is disconnected and no container
+      Raised if the input bipartite graph is disconnected and no iterable
       with all nodes in one bipartite set is provided. When determining
       the nodes in each bipartite set more than one valid solution is
       possible if the input graph is disconnected.
@@ -428,32 +424,28 @@ def to_vertex_cover(G, matching, top_nodes=None):
     Parameters
     ----------
     G : NetworkX graph
-
       Undirected bipartite graph
 
     matching : dictionary
-
       A dictionary whose keys are vertices in `G` and whose values are the
       distinct neighbors comprising the maximum matching for `G`, as returned
       by, for example, :func:`maximum_matching`. The dictionary *must*
       represent the maximum matching.
 
-    top_nodes : container
-
-      Container with all nodes in one bipartite node set. If not supplied
+    top_nodes : iterable
+      Iterable with all nodes in one bipartite node set. If not supplied
       it will be computed. But if more than one solution exists an exception
       will be raised.
 
     Returns
     -------
-    vertex_cover : :class:`set`
-
+    vertex_cover : set
       The minimum vertex cover in `G`.
 
     Raises
     ------
     AmbiguousSolution
-      Raised if the input bipartite graph is disconnected and no container
+      Raised if the input bipartite graph is disconnected and no iterable
       with all nodes in one bipartite set is provided. When determining
       the nodes in each bipartite set more than one valid solution is
       possible if the input graph is disconnected.
@@ -524,23 +516,19 @@ def minimum_weight_full_matching(G, top_nodes=None, weight="weight"):
     Parameters
     ----------
     G : NetworkX graph
-
       Undirected bipartite graph
 
-    top_nodes : container
-
-      Container with all nodes in one bipartite node set. If not supplied
+    top_nodes : iterable
+      Iterable with all nodes in one bipartite node set. If not supplied
       it will be computed.
 
     weight : string, optional (default='weight')
-
        The edge data key used to provide each value in the matrix.
        If None, then each edge has weight 1.
 
     Returns
     -------
     matches : dictionary
-
       The matching is returned as a dictionary, `matches`, such that
       ``matches[v] == w`` if node `v` is matched to node `w`. Unmatched
       nodes do not occur as a key in `matches`.
