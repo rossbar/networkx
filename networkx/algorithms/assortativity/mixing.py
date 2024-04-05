@@ -26,8 +26,8 @@ def attribute_mixing_dict(G, attribute, nodes=None, normalized=False):
     attribute : string
        Node attribute key.
 
-    nodes: list or iterable (optional)
-        Unse nodes in container to build the dict. The default is all nodes.
+    nodes: iterable (optional)
+        Use nodes in iterable to build the dict. The default is all nodes.
 
     normalized : bool (default=False)
        Return counts if False or probabilities if True.
@@ -65,9 +65,8 @@ def attribute_mixing_matrix(G, attribute, nodes=None, mapping=None, normalized=T
     attribute : string
        Node attribute key.
 
-    nodes: list or iterable (optional)
-        Use only nodes in container to build the matrix. The default is
-        all nodes.
+    nodes : iterable (optional)
+        Use only nodes in iterable to build the matrix. The default is all nodes.
 
     mapping : dictionary, optional
        Mapping from node attribute to integer index in matrix.
@@ -156,17 +155,16 @@ def degree_mixing_matrix(
     G : graph
        NetworkX graph object.
 
-    x: string ('in','out')
+    x : string ('in','out')
        The degree type for source node (directed graphs only).
 
-    y: string ('in','out')
+    y : string ('in','out')
        The degree type for target node (directed graphs only).
 
-    nodes: list or iterable (optional)
-        Build the matrix using only nodes in container.
-        The default is all nodes.
+    nodes : iterable (optional)
+        Build the matrix using only nodes in iterable. The default is all nodes.
 
-    weight: string or None, optional (default=None)
+    weight : string or None, optional (default=None)
        The edge attribute that holds the numerical value used
        as a weight.  If None, then each edge has weight 1.
        The degree is the sum of the edge weights adjacent to the node.
@@ -222,8 +220,8 @@ def mixing_dict(xy, normalized=False):
 
     Parameters
     ----------
-    xy : list or container of two-tuples
-       Pairs of (x,y) items.
+    xy : iterable of two-tuples
+       Pairs of ``(x, y)`` items.
 
     attribute : string
        Node attribute key
@@ -233,8 +231,8 @@ def mixing_dict(xy, normalized=False):
 
     Returns
     -------
-    d: dictionary
-       Counts or Joint probability of occurrence of values in xy.
+    d : dictionary
+       Counts or Joint probability of occurrence of values in `xy`.
     """
     d = {}
     psum = 0.0
