@@ -473,10 +473,8 @@ class DiGraph(Graph):
 
         Parameters
         ----------
-        nodes_for_adding : iterable container
-            A container of nodes (list, dict, set, etc.).
-            OR
-            A container of (node, attribute dict) tuples.
+        nodes_for_adding : iterable
+            An iterable of nodes or ``(node, attribute dict)`` tuples.
             Node attributes are updated using the attribute dict.
         attr : keyword arguments, optional (default= no attributes)
             Update attributes for all nodes in nodes.
@@ -595,9 +593,9 @@ class DiGraph(Graph):
 
         Parameters
         ----------
-        nodes : iterable container
-            A container of nodes (list, dict, set, etc.).  If a node
-            in the container is not in the graph it is silently ignored.
+        nodes : iterable
+            An iterable of nodes. If a node in `nodes` is not in the graph it is
+            silently ignored.
 
         See Also
         --------
@@ -721,10 +719,10 @@ class DiGraph(Graph):
 
         Parameters
         ----------
-        ebunch_to_add : container of edges
-            Each edge given in the container will be added to the
-            graph. The edges must be given as 2-tuples (u, v) or
-            3-tuples (u, v, d) where d is a dictionary containing edge data.
+        ebunch_to_add : iterable of edges
+            Each edge given in the iterable will be added to the graph.
+            The edges must be given as 2-tuples ``(u, v)`` or 3-tuples ``(u, v, d)``
+            where ``d`` is a dictionary containing edge data.
         attr : keyword arguments, optional
             Edge data (or labels or objects) can be assigned using
             keyword arguments.
@@ -838,12 +836,12 @@ class DiGraph(Graph):
 
         Parameters
         ----------
-        ebunch: list or container of edge tuples
-            Each edge given in the list or container will be removed
-            from the graph. The edges can be:
+        ebunch: iterable of edge tuples
+            Each edge given in `ebunch` will be removed from the graph.
+            The edges can be:
 
-                - 2-tuples (u, v) edge between u and v.
-                - 3-tuples (u, v, k) where k is ignored.
+                - 2-tuples ``(u, v)`` edge between ``u`` and ``v``.
+                - 3-tuples ``(u, v, k)`` where ``k`` is ignored.
 
         See Also
         --------
