@@ -528,8 +528,8 @@ class MultiGraph(Graph):
 
         Parameters
         ----------
-        ebunch_to_add : container of edges
-            Each edge given in the container will be added to the
+        ebunch_to_add : iterable of edges
+            Each edge given in the iterable will be added to the
             graph. The edges can be:
 
                 - 2-tuples (u, v) or
@@ -704,9 +704,9 @@ class MultiGraph(Graph):
 
         Parameters
         ----------
-        ebunch: list or container of edge tuples
-            Each edge given in the list or container will be removed
-            from the graph. The edges can be:
+        ebunch: iterable of edge tuples
+            Each edge given in the iterable will be removed from the graph.
+            The edges can be:
 
                 - 2-tuples (u, v) A single edge between u and v is removed.
                 - 3-tuples (u, v, key) The edge identified by key is removed.
