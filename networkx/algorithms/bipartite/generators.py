@@ -31,16 +31,16 @@ def complete_bipartite_graph(n1, n2, create_using=None):
 
     Parameters
     ----------
-    n1, n2 : integer or iterable container of nodes
-        If integers, nodes are from `range(n1)` and `range(n1, n1 + n2)`.
-        If a container, the elements are the nodes.
+    n1, n2 : integer or iterable of nodes
+        If integers, nodes are from ``range(n1)`` and ``range(n1, n1 + n2)``.
+        If iterable, then the elements of the iterables are the nodes.
     create_using : NetworkX graph instance, (default: nx.Graph)
        Return graph of this type.
 
     Notes
     -----
-    Nodes are the integers 0 to `n1 + n2 - 1` unless either n1 or n2 are
-    containers of nodes. If only one of n1 or n2 are integers, that
+    Nodes are the integers 0 to ``n1 + n2 - 1`` unless either `n1` or `n2` are
+    iterables of nodes. If only one of `n1` or `n2` are integers, that
     integer is replaced by `range` of that integer.
 
     The nodes are assigned the attribute 'bipartite' with the value 0 or 1
