@@ -233,8 +233,8 @@ def all_pairs_node_connectivity(G, nbunch=None, cutoff=None):
     ----------
     G : NetworkX graph
 
-    nbunch: container
-        Container of nodes. If provided node connectivity will be computed
+    nbunch: iterable
+        Iterable of nodes. If provided node connectivity will be computed
         only over pairs of nodes in nbunch.
 
     cutoff : integer
@@ -295,8 +295,7 @@ def all_pairs_node_connectivity(G, nbunch=None, cutoff=None):
 
 
 def _bidirectional_shortest_path(G, source, target, exclude):
-    """Returns shortest path between source and target ignoring nodes in the
-    container 'exclude'.
+    """Returns shortest path between source and target ignoring nodes in `exclude`.
 
     Parameters
     ----------
@@ -309,12 +308,12 @@ def _bidirectional_shortest_path(G, source, target, exclude):
     target : node
         Ending node for path
 
-    exclude: container
-        Container for nodes to exclude from the search for shortest paths
+    exclude : Collection
+        Collection of nodes to exclude from the search for shortest paths
 
     Returns
     -------
-    path: list
+    path : list
         Shortest path between source and target ignoring nodes in 'exclude'
 
     Raises
@@ -327,7 +326,7 @@ def _bidirectional_shortest_path(G, source, target, exclude):
     -----
     This function and its helper are originally from
     networkx.algorithms.shortest_paths.unweighted and are modified to
-    accept the extra parameter 'exclude', which is a container for nodes
+    accept the extra parameter 'exclude', which is a collection of nodes
     already used in other paths that should be ignored.
 
     References
@@ -359,7 +358,7 @@ def _bidirectional_shortest_path(G, source, target, exclude):
 
 def _bidirectional_pred_succ(G, source, target, exclude):
     # does BFS from both source and target and meets in the middle
-    # excludes nodes in the container "exclude" from the search
+    # excludes nodes in `exclude` from the search
 
     # handle either directed or undirected
     if G.is_directed():
@@ -382,7 +381,7 @@ def _bidirectional_pred_succ(G, source, target, exclude):
     while forward_fringe and reverse_fringe:
         # Make sure that we iterate one step forward and one step backwards
         # thus source and target will only trigger "found path" when they are
-        # adjacent and then they can be safely included in the container 'exclude'
+        # adjacent and then they can be safely added to `exclude`
         level += 1
         if level % 2 != 0:
             this_level = forward_fringe
