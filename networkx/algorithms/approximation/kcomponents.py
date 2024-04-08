@@ -320,9 +320,8 @@ class _AntiGraph(nx.Graph):
 
         Parameters
         ----------
-        nbunch : iterable container, optional (default=all nodes)
-            A container of nodes.  The container will be iterated
-            through once.
+        nbunch : iterable, optional (default=all nodes)
+            An iterable of nodes that will be iterated through once.
 
         weight : string or None, optional (default=None)
            The edge attribute that holds the numerical value used
