@@ -31,7 +31,7 @@ def not_implemented_for(*graph_types):
 
     Parameters
     ----------
-    graph_types : container of strings
+    graph_types : collection of strings
         Entries must be one of "directed", "undirected", "multigraph", or "graph".
 
     Returns
@@ -203,12 +203,12 @@ def open_file(path_arg, mode="r"):
 
 
 def nodes_or_number(which_args):
-    """Decorator to allow number of nodes or container of nodes.
+    """Decorator to allow number of nodes or iterable of nodes.
 
-    With this decorator, the specified argument can be either a number or a container
-    of nodes. If it is a number, the nodes used are `range(n)`.
-    This allows `nx.complete_graph(50)` in place of `nx.complete_graph(list(range(50)))`.
-    And it also allows `nx.complete_graph(any_list_of_nodes)`.
+    With this decorator, the specified argument can be either a number or an iterable
+    of nodes. If it is a number, the nodes used are ``range(n)``.
+    This allows ``nx.complete_graph(50)`` in place of ``nx.complete_graph(list(range(50)))``.
+    And it also allows ``nx.complete_graph(any_list_of_nodes)``.
 
     Parameters
     ----------
