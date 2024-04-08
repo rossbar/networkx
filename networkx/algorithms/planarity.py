@@ -958,9 +958,9 @@ class PlanarEmbedding(nx.DiGraph):
 
         Parameters
         ----------
-        nodes : iterable container
-            A container of nodes (list, dict, set, etc.).  If a node
-            in the container is not in the graph it is silently ignored.
+        nodes : iterable
+            A iterable of nodes (e.g. list, dict, set, etc.).  If a node
+            in the iterable is not in the graph it is silently ignored.
 
         See Also
         --------
@@ -1241,12 +1241,12 @@ class PlanarEmbedding(nx.DiGraph):
 
         Parameters
         ----------
-        ebunch: list or container of edge tuples
+        ebunch: iterable of edge tuples
             Each pair of half-edges between the nodes given in the tuples
             will be removed from the graph. The nodes can be passed as:
 
-                - 2-tuples (u, v) half-edges (u, v) and (v, u).
-                - 3-tuples (u, v, k) where k is ignored.
+                - 2-tuples ``(u, v)`` half-edges ``(u, v)`` and ``(v, u)``.
+                - 3-tuples ``(u, v, k)`` where ``k`` is ignored.
 
         See Also
         --------
