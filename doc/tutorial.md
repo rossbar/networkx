@@ -51,14 +51,14 @@ at a time,
 G.add_node(1)
 ```
 
-or add nodes from any {py:term}`iterable` container, such as a list
+or add nodes from any {py:term}`iterable` object, such as a list
 
 ```{code-cell}
 G.add_nodes_from([2, 3])
 ```
 
 You can also add nodes along with node
-attributes if your container yields 2-tuples of the form
+attributes if your iterable yields 2-tuples of the form
 `(node, node_attribute_dict)`:
 
 ```{code-cell}
@@ -109,7 +109,7 @@ G.add_edges_from([(1, 2), (1, 3)])
 ```
 
 or by adding any {term}`ebunch` of edges. An _ebunch_ is any iterable
-container of edge-tuples. An edge-tuple can be a 2-tuple of nodes or a 3-tuple
+of edge-tuples. An edge-tuple can be a 2-tuple of nodes or a 3-tuple
 with 2 nodes followed by an edge attribute dictionary, e.g.,
 `(2, 3, {'weight': 3.1415})`. Edge attributes are discussed further
 {ref}`below <attributes>`.
