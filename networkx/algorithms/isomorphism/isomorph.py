@@ -3,7 +3,7 @@ Graph isomorphism functions.
 """
 
 import itertools
-from collections import Counter
+from collections import Counter, defaultdict
 
 import networkx as nx
 from networkx.exception import NetworkXError
@@ -65,38 +65,37 @@ def could_be_isomorphic(G1, G2, *, properties="dtc"):
         return False
 
     properties_to_check = set(properties)
-    G1_props, G2_props = [], []
+    G1_props, G2_props = defaultdict(list), defaultdict(list)
 
-    def _properties_consistent():
-        # Ravel the properties into a table with # nodes rows and # properties columns
-        G1_ptable = [tuple(p[n] for p in G1_props) for n in G1]
-        G2_ptable = [tuple(p[n] for p in G2_props) for n in G2]
-
-        return sorted(G1_ptable) == sorted(G2_ptable)
-
-    # The property table is built and checked as each individual property is
-    # added. The reason for this is the building/checking the property table
+    # The combined properties lists are checked as each individual property is
+    # added. The reason for this is that sorting/comparing the properties
     # is in general much faster than computing the properties, making it
     # worthwhile to check multiple times to enable early termination when
-    # a subset of properties don't match
+    # a subset of properties don't match.
 
     # Degree sequence
     if "d" in properties_to_check:
-        G1_props.append(G1.degree())
-        G2_props.append(G2.degree())
-        if not _properties_consistent():
+        for n, d in G1.degree():
+            G1_props[n].append(d)
+        for n, d in G2.degree():
+            G2_props[n].append(d)
+        if sorted(G1_props.values()) != sorted(G2_props.values()):
             return False
     # Sequence of triangles per node
     if "t" in properties_to_check:
-        G1_props.append(nx.triangles(G1))
-        G2_props.append(nx.triangles(G2))
-        if not _properties_consistent():
+        for n, t in nx.triangles(G1).items():
+            G1_props[n].append(t)
+        for n, t in nx.triangles(G2).items():
+            G2_props[n].append(t)
+        if sorted(G1_props.values()) != sorted(G2_props.values()):
             return False
     # Sequence of maximal cliques per node
     if "c" in properties_to_check:
-        G1_props.append(Counter(itertools.chain.from_iterable(nx.find_cliques(G1))))
-        G2_props.append(Counter(itertools.chain.from_iterable(nx.find_cliques(G2))))
-        if not _properties_consistent():
+        for n, c in Counter(itertools.chain.from_iterable(nx.find_cliques(G1))).items():
+            G1_props[n].append(c)
+        for n, c in Counter(itertools.chain.from_iterable(nx.find_cliques(G2))).items():
+            G2_props[n].append(c)
+        if sorted(G1_props.values()) != sorted(G2_props.values()):
             return False
 
     # All checked conditions passed
