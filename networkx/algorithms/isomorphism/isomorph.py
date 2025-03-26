@@ -72,29 +72,26 @@ def could_be_isomorphic(G1, G2, *, properties="dtc"):
     # is in general much faster than computing the properties, making it
     # worthwhile to check multiple times to enable early termination when
     # a subset of properties don't match.
+    def _append_and_properties_consistent(new_prop):
+        """new_prop is a callable that returns an iterable over (n, prop) pairs"""
+        for G, props in zip((G1, G2), (G1_props, G2_props)):
+            for n, p in new_prop(G):
+                props[n].append(p)
+        return sorted(G1_props.values()) == sorted(G2_props.values())
 
     # Degree sequence
     if "d" in properties_to_check:
-        for G, props in zip((G1, G2), (G1_props, G2_props)):
-            for n, d in G.degree():
-                props[n].append(d)
-        if sorted(G1_props.values()) != sorted(G2_props.values()):
+        if not _append_and_properties_consistent(nx.degree):
             return False
     # Sequence of triangles per node
     if "t" in properties_to_check:
-        for G, props in zip((G1, G2), (G1_props, G2_props)):
-            for n, t in nx.triangles(G).items():
-                props[n].append(t)
-        if sorted(G1_props.values()) != sorted(G2_props.values()):
+        if not _append_and_properties_consistent(lambda G: nx.triangles(G).items()):
             return False
     # Sequence of maximal cliques per node
     if "c" in properties_to_check:
-        for G, props in zip((G1, G2), (G1_props, G2_props)):
-            for n, c in Counter(
-                itertools.chain.from_iterable(nx.find_cliques(G))
-            ).items():
-                props[n].append(c)
-        if sorted(G1_props.values()) != sorted(G2_props.values()):
+        if not _append_and_properties_consistent(
+            lambda G: Counter(itertools.chain.from_iterable(nx.find_cliques(G))).items()
+        ):
             return False
 
     # All checked conditions passed
