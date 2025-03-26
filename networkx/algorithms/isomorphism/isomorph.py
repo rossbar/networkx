@@ -75,26 +75,25 @@ def could_be_isomorphic(G1, G2, *, properties="dtc"):
 
     # Degree sequence
     if "d" in properties_to_check:
-        for n, d in G1.degree():
-            G1_props[n].append(d)
-        for n, d in G2.degree():
-            G2_props[n].append(d)
+        for G, props in zip((G1, G2), (G1_props, G2_props)):
+            for n, d in G.degree():
+                props[n].append(d)
         if sorted(G1_props.values()) != sorted(G2_props.values()):
             return False
     # Sequence of triangles per node
     if "t" in properties_to_check:
-        for n, t in nx.triangles(G1).items():
-            G1_props[n].append(t)
-        for n, t in nx.triangles(G2).items():
-            G2_props[n].append(t)
+        for G, props in zip((G1, G2), (G1_props, G2_props)):
+            for n, t in nx.triangles(G).items():
+                props[n].append(t)
         if sorted(G1_props.values()) != sorted(G2_props.values()):
             return False
     # Sequence of maximal cliques per node
     if "c" in properties_to_check:
-        for n, c in Counter(itertools.chain.from_iterable(nx.find_cliques(G1))).items():
-            G1_props[n].append(c)
-        for n, c in Counter(itertools.chain.from_iterable(nx.find_cliques(G2))).items():
-            G2_props[n].append(c)
+        for G, props in zip((G1, G2), (G1_props, G2_props)):
+            for n, c in Counter(
+                itertools.chain.from_iterable(nx.find_cliques(G))
+            ).items():
+                props[n].append(c)
         if sorted(G1_props.values()) != sorted(G2_props.values()):
             return False
 
