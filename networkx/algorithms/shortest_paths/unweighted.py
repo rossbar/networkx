@@ -291,7 +291,7 @@ def _bidirectional_pred_succ(G, source, target):
                         pred[w] = v
                     if w in succ:  # path found
                         # print(w)
-                        hinge = w
+                        hinge = w if hinge is None else hinge
                         return
 
     def explore_backward():
@@ -307,7 +307,7 @@ def _bidirectional_pred_succ(G, source, target):
                         reverse_fringe.append(w)
                     if w in pred:  # found path
                         # print(w)
-                        hinge = w
+                        hinge = w if hinge is None else hinge
                         return
 
     # Setup threads
