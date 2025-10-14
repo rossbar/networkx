@@ -256,6 +256,8 @@ def _bidirectional_pred_succ(G, source, target):
     pred is a dictionary of predecessors from w to the source, and
     succ is a dictionary of successors from w to the target.
     """
+    import threading
+
     # does BFS from both source and target and meets in the middle
     if target == source:
         return ({target: None}, {source: None}, source)
@@ -271,13 +273,15 @@ def _bidirectional_pred_succ(G, source, target):
     # predecessor and successors in search
     pred = {source: None}
     succ = {target: None}
+    # Initialize placeholder for "hinge" node found in both forward and
+    # backward searches
+    hinge = None
 
     # initialize fringes, start with forward
-    forward_fringe = [source]
-    reverse_fringe = [target]
-
-    while forward_fringe and reverse_fringe:
-        if len(forward_fringe) <= len(reverse_fringe):
+    def explore_forward():
+        nonlocal hinge
+        forward_fringe = [source]
+        while forward_fringe:
             this_level = forward_fringe
             forward_fringe = []
             for v in this_level:
@@ -286,8 +290,14 @@ def _bidirectional_pred_succ(G, source, target):
                         forward_fringe.append(w)
                         pred[w] = v
                     if w in succ:  # path found
-                        return pred, succ, w
-        else:
+                        # print(w)
+                        hinge = w
+                        return
+
+    def explore_backward():
+        nonlocal hinge
+        reverse_fringe = [target]
+        while reverse_fringe:
             this_level = reverse_fringe
             reverse_fringe = []
             for v in this_level:
@@ -296,9 +306,26 @@ def _bidirectional_pred_succ(G, source, target):
                         succ[w] = v
                         reverse_fringe.append(w)
                     if w in pred:  # found path
-                        return pred, succ, w
+                        # print(w)
+                        hinge = w
+                        return
 
-    raise nx.NetworkXNoPath(f"No path between {source} and {target}.")
+    # Setup threads
+    from_source_thread = threading.Thread(target=explore_forward)
+    from_target_thread = threading.Thread(target=explore_backward)
+    threads = [from_source_thread, from_target_thread]
+
+    # Launch threads
+    for t in threads:
+        t.start()
+
+    # Wait for both threads to finish
+    for t in threads:
+        t.join()
+
+    if hinge is None:
+        raise nx.NetworkXNoPath(f"No path between {source} and {target}.")
+    return pred, succ, hinge
 
 
 @nx._dispatchable
