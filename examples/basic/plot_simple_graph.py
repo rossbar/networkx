@@ -19,16 +19,17 @@ G.add_edge(4, 5)
 
 # explicitly set positions
 pos = {1: (0, 0), 2: (-1, 0.3), 3: (2, 0.17), 4: (4, 0.255), 5: (5, 0.03)}
+nx.set_node_attributes(G, pos, name="pos")
 
 options = {
-    "font_size": 36,
+    "node_label": {"size": 36},
     "node_size": 3000,
     "node_color": "white",
-    "edgecolors": "black",
-    "linewidths": 5,
-    "width": 5,
+    "node_border_color": "black",
+    "node_border_width": 5,
+    "edge_width": 5,
 }
-nx.draw_networkx(G, pos, **options)
+nx.display(G, **options)
 
 # Set margins for the axes so that nodes aren't clipped
 ax = plt.gca()
@@ -50,8 +51,9 @@ right_nodes = [5, 6]
 pos = {n: (0, i) for i, n in enumerate(left_nodes)}
 pos.update({n: (1, i + 0.5) for i, n in enumerate(middle_nodes)})
 pos.update({n: (2, i + 0.5) for i, n in enumerate(right_nodes)})
+nx.set_node_attributes(G, pos, name="pos")
 
-nx.draw_networkx(G, pos, **options)
+nx.display(G, **options)
 
 # Set margins for the axes so that nodes aren't clipped
 ax = plt.gca()

@@ -20,5 +20,6 @@ nx.write_edgelist(G, path="grid.edgelist", delimiter=":")
 H = nx.read_edgelist(path="grid.edgelist", delimiter=":")
 
 pos = nx.spring_layout(H, seed=200)
-nx.draw(H, pos)
+nx.set_node_attributes(H, pos, name="pos")
+nx.display(H, node_label=True)
 plt.show()

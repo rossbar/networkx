@@ -45,5 +45,6 @@ print(f"periphery: {nx.periphery(G)}")
 print(f"density: {nx.density(G)}")
 
 pos = nx.spring_layout(G, seed=3068)  # Seed layout for reproducibility
-nx.draw(G, pos=pos, with_labels=True)
+nx.set_node_attributes(G, pos, name="pos")
+nx.display(G, node_label=True)
 plt.show()
