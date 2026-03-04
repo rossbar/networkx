@@ -75,9 +75,8 @@ for k in pos:
     pos[k][-1] *= -1
 
 # Visualize the trie
-nx.draw(G, pos=pos, with_labels=True)
-elabels = {(u, v): l for u, v, l in G.edges(data="char")}
-nx.draw_networkx_edge_labels(G, pos, edge_labels=elabels)
+nx.set_node_attributes(G, pos, name="pos")
+nx.display(G, node_label=True, edge_label="char")
 
 
 # A letter can be encoded by following the path from the given letter (node) to

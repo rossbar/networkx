@@ -32,5 +32,6 @@ for line in nx.generate_adjlist(G):
     print(line)
 
 pos = nx.spring_layout(G, seed=seed)  # Seed for reproducible layout
-nx.draw(G, pos=pos)
+nx.set_node_attributes(G, pos, name="pos")
+nx.display(G, node_label=False)
 plt.show()

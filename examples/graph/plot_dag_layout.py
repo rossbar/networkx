@@ -34,9 +34,10 @@ for layer, nodes in enumerate(nx.topological_generations(G)):
 
 # Compute the multipartite_layout using the "layer" node attribute
 pos = nx.multipartite_layout(G, subset_key="layer")
+nx.set_node_attributes(G, pos, name="pos")
 
 fig, ax = plt.subplots()
-nx.draw_networkx(G, pos=pos, ax=ax)
+nx.display(G, ax, node_label=True)
 ax.set_title("DAG layout in topological order")
 fig.tight_layout()
 plt.show()

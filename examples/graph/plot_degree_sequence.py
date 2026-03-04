@@ -33,5 +33,6 @@ for d in hist:
     print(f"{d:4} {hist[d]:6}")
 
 pos = nx.spring_layout(G, seed=seed)  # Seed layout for reproducibility
-nx.draw(G, pos=pos)
+nx.set_node_attributes(G, pos, name="pos")
+nx.display(G, node_label=False)
 plt.show()

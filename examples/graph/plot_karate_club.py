@@ -21,5 +21,6 @@ print("Node Degree")
 for v in G:
     print(f"{v:4} {G.degree(v):6}")
 
-nx.draw_circular(G, with_labels=True)
+nx.set_node_attributes(G, nx.circular_layout(G), name="pos")
+nx.display(G, node_label=True)
 plt.show()
