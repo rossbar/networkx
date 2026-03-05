@@ -266,7 +266,7 @@ def steiner_tree(G, terminal_nodes, weight="weight", method=None):
     return T
 
 
-@nx.utils.not_implemented_for("undirected")
+@nx.utils.not_implemented_for("undirected", "multigraph")
 def directed_steiner_tree(
     G, root, terminals, *, min_terminals=None, levels=None, weight="weight"
 ):
@@ -388,9 +388,6 @@ def directed_steiner_tree(
     if missing:
         raise nx.NetworkXError(f"Terminals {missing} not in G")
 
-    if G.is_multigraph():
-        G = _collapse_multigraph_to_digraph(G, weight)
-
     reachable_nodes = nx.single_source_shortest_path_length(G, root).keys()
     reachable_terminals = terminals & reachable_nodes
     if len(reachable_terminals) < min_terminals:
@@ -481,17 +478,6 @@ def _build_strict_steiner_tree(G_expanded, root, covered, pred, terminals):
         leaves = {p for p in parents if DST.out_degree(p) == 0 and p not in terminals}
 
     return DST
-
-
-def _collapse_multigraph_to_digraph(G, weight="weight"):
-    """Return a DiGraph with parallel edges collapsed to minimum weight edges."""
-    H = nx.DiGraph()
-    for u, v, data in G.edges(data=True):
-        w = data.get(weight, 1)
-        if not H.has_edge(u, v) or w < H[u][v].get(weight, float("inf")):
-            attrs = dict(data)
-            H.add_edge(u, v, **attrs)
-    return H
 
 
 def _directed_steiner_tree_density(G, terminals, weight):
