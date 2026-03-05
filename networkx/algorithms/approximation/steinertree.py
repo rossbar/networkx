@@ -266,10 +266,9 @@ def steiner_tree(G, terminal_nodes, weight="weight", method=None):
     return T
 
 
-@nx.utils.not_implemented_for("undirected", "multigraph")
-def directed_steiner_tree(
-    G, root, terminals, *, min_terminals=None, levels=None, weight="weight"
-):
+@nx.utils.not_implemented_for("undirected")
+@nx.utils.not_implemented_for("multigraph")
+def directed_steiner_tree(G, root, terminals, *, levels=None, weight="weight"):
     r"""
     Approximate solution to the Directed Steiner Tree problem.
 
@@ -288,13 +287,6 @@ def directed_steiner_tree(
         The root node where the algorithm starts growing partial trees.
     terminals : iterable of nodes
         An iterable of terminal nodes. This will be converted to a set.
-    min_terminals : int, optional (default: None)
-        Minimum number of terminals to connect.
-        If None, this is set to the total number of terminals.
-        Setting this equal to the number of terminals gives the standard
-        Directed Steiner Tree problem (Charikar et al. 1999).
-        Smaller values allow a partial version where only a subset of
-        terminals is required.
     levels : int, optional (default=2)
         Maximum recursion depth of the algorithm, corresponding to the
         parameter `i` in Charikar et al. (1999). Larger values improve
@@ -314,14 +306,11 @@ def directed_steiner_tree(
     Raises
     ------
     NetworkXError
-        If levels is not greater than one or None, if ``min_terminals``
-        is not a positive integer, if ``min_terminals`` exceeds the
-        number of given terminals, if ``min_terminals`` is not
-        a positive integer or if any terminals are not in ``G``.
+        If levels is not greater than one or None, or if any terminals are not
+        in ``G``.
     NetworkXUnfeasible
-        If no terminals are given, if no terminals are reachable from
-        the root within the levels, or if the resulting tree fails
-        to cover at least ``min_terminals`` terminals.
+        If no terminals are given or if no terminals are reachable from
+        the root within the levels.
 
     Notes
     -----
@@ -346,16 +335,6 @@ def directed_steiner_tree(
         quasi-polynomial time :math:`n^{O(\log k)}`, which is typically
         impractical except for very small graphs.
 
-    - The parameter ``min_terminals`` generalizes the problem:
-
-    * If ``min_terminals`` equals the total number of terminals, the function
-        solves the standard Directed Steiner Tree problem as in
-        Charikar et al. (1999), which requires spanning all terminals.
-    * If ``min_terminals`` is smaller, the algorithm still runs and produces a
-        tree covering at least that many terminals. This partial version is
-        convenient in practice, but the approximation guarantees in the paper
-        apply only to the full-terminal case.
-
     References
     ----------
     .. [1] Charikar, M., Chekuri, C., Cheung, T-Y., Dai, Z., Goel, A.,
@@ -375,37 +354,24 @@ def directed_steiner_tree(
     elif levels <= 1:
         raise nx.NetworkXError("levels must greater than one or None")
 
-    if min_terminals is None:
-        min_terminals = len(terminals)
-    elif min_terminals <= 0:
-        raise nx.NetworkXError("min_terminals must be a positive integer or None")
-    elif min_terminals > len(terminals):
-        raise nx.NetworkXError(
-            "min_terminals must be less than or equal to the number of terminals"
-        )
-
     missing = terminals - set(G.nodes)
     if missing:
         raise nx.NetworkXError(f"Terminals {missing} not in G")
 
     reachable_nodes = nx.single_source_shortest_path_length(G, root).keys()
     reachable_terminals = terminals & reachable_nodes
-    if len(reachable_terminals) < min_terminals:
+    if len(reachable_terminals) < len(terminals):
         raise nx.NetworkXUnfeasible(
             f"Only {len(reachable_terminals)} terminals are reachable from root {root}, "
-            f"which is fewer than required min_terminals={min_terminals}."
+            f"which is fewer than the number of terminal nodes {len(terminals)}."
         )
 
     G_closure = _directed_metric_closure(G, weight=weight)
     G_closure_tree = _directed_steiner_tree(
-        G_closure, root, reachable_terminals, min_terminals, levels, weight
+        G_closure, root, reachable_terminals, len(reachable_terminals), levels, weight
     )
     covered = set(G_closure_tree.nodes) & set(reachable_terminals)
-    if len(covered) < min_terminals:
-        raise nx.NetworkXUnfeasible(
-            "Directed Steiner tree could not cover at least "
-            f"{min_terminals}.\nReachable terminals: {list(reachable_terminals)}"
-        )
+
     G_expanded = _expand_full_closure(G, G_closure_tree)
     pred, dist = nx.dijkstra_predecessor_and_distance(G_expanded, root, weight=weight)
 
@@ -500,7 +466,7 @@ def _directed_steiner_tree(G, root, terminals, min_terminals, levels, weight):
     reachable_terminals = terminals & reachable_nodes
 
     H = nx.DiGraph()
-    if levels == 0 or len(reachable_terminals) < min_terminals:
+    if levels == 0:
         return H
 
     if levels == 1:

@@ -320,7 +320,7 @@ class TestDirectedSteinerTree:
         G2.add_edge(0, 2, weight=1)
         G2.add_edge(2, 1, w=1)
 
-        G3 = nx.MultiDiGraph()
+        G3 = nx.DiGraph()
         G3.add_edge(1, 2, w=1)
         G3.add_edge(2, 3, w=3)
         G3.add_edge(1, 2, weight=7)
@@ -362,17 +362,6 @@ class TestDirectedSteinerTree:
             H = directed_steiner_tree(self.G2, 0, {1}, levels=levels)
             assert (0, 2) and (2, 1) in H.edges
 
-    @pytest.mark.parametrize(
-        "min_terminals, should_raise", [(-1, True), (0, True), (2, True), (1, False)]
-    )
-    def test_min_terminals_values(self, min_terminals, should_raise):
-        if should_raise:
-            with pytest.raises(nx.NetworkXError):
-                directed_steiner_tree(self.G2, 0, {1}, min_terminals=min_terminals)
-        else:
-            H = directed_steiner_tree(self.G2, 0, {1}, min_terminals=min_terminals)
-            assert 1 in H.nodes
-
     def test_no_reachable_nodes(self):
         with pytest.raises(nx.NetworkXUnfeasible):
             directed_steiner_tree(self.G1, 0, {3})
@@ -387,11 +376,5 @@ class TestDirectedSteinerTree:
         assert set(H.nodes) == {0, 1, 2}
         assert (0, 1) and (0, 2) in H.edges
 
-    def test_cannot_cover_min_terminals_raises(self):
-        with pytest.raises(nx.NetworkXError):
-            directed_steiner_tree(self.G2, 0, {1, 2, 3, 4}, min_terminals=4)
-
     def test_multidigraph_missing_weight(self):
-        directed_steiner_tree(
-            self.G3, 1, {2, 3}, min_terminals=2, levels=2, weight="weight"
-        )
+        directed_steiner_tree(self.G3, 1, {2, 3}, levels=2, weight="weight")
