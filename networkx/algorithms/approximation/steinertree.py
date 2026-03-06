@@ -385,11 +385,9 @@ def _expand_full_closure(G, G_closure):
 
 def _build_strict_steiner_tree(G_expanded, root, covered, pred, terminals):
     DST = nx.DiGraph()
-    DST.add_node(root, **G_expanded.nodes[root])
+    DST.add_node(root)
     for t in covered:
-        if t == root:
-            continue
-        if t not in pred:
+        if t == root or t not in pred:
             continue
 
         v = t
@@ -397,11 +395,6 @@ def _build_strict_steiner_tree(G_expanded, root, covered, pred, terminals):
             # pred[v] may contain multiple predecessors (ties in shortest paths).
             # Use min() to ensure deterministic output instead of relying on list order.
             u = min(pred[v])
-
-            if u not in DST:
-                DST.add_node(u, **G_expanded.nodes[u])
-            if v not in DST:
-                DST.add_node(v, **G_expanded.nodes[v])
 
             DST.add_edge(u, v, **G_expanded[u][v])
             v = u
@@ -444,7 +437,7 @@ def _directed_steiner_tree(G, root, terminals, min_terminals, levels, weight):
         return H
 
     if levels == 1:
-        H.add_node(root, **G.nodes[root])
+        H.add_node(root)
         edges_filtered = [
             (u, v, d)
             for u, v, d in G.edges(data=True)
@@ -454,7 +447,6 @@ def _directed_steiner_tree(G, root, terminals, min_terminals, levels, weight):
         edges_sorted = sorted(edges_filtered, key=lambda x: x[2].get(weight, 1))
 
         for u, v, d in edges_sorted[:min_terminals]:
-            H.add_node(v, **G.nodes[v])
             H.add_edge(u, v, **d)
 
         return H
@@ -470,8 +462,6 @@ def _directed_steiner_tree(G, root, terminals, min_terminals, levels, weight):
                 sub_tree = _directed_steiner_tree(
                     G, v, terminals, n, levels - 1, weight
                 )
-                sub_tree.add_node(root, **G.nodes[root])
-                sub_tree.add_node(v, **G.nodes[v])
                 sub_tree.add_edge(root, v, **G[root][v])
 
                 sub_density = _directed_steiner_tree_density(
