@@ -437,18 +437,16 @@ def _directed_steiner_tree(G, root, terminals, min_terminals, levels, weight):
         return H
 
     if levels == 1:
-        H.add_node(root)
-        edges_filtered = [
-            (u, v, d)
-            for u, v, d in G.edges(data=True)
-            if u == root and v != root and v in terminals
-        ]
-
-        edges_sorted = sorted(edges_filtered, key=lambda x: x[2].get(weight, 1))
-
-        for u, v, d in edges_sorted[:min_terminals]:
-            H.add_edge(u, v, **d)
-
+        H.add_edges_from(
+            sorted(
+                (
+                    (root, succ, G[root][succ])
+                    for succ in G._succ[root].keys() & terminals
+                    if succ != root
+                ),
+                key=lambda x: x[2][weight],
+            )
+        )
         return H
 
     terminals = terminals.copy()
