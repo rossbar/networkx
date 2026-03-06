@@ -344,24 +344,6 @@ class TestDirectedSteinerTree:
         with pytest.raises(nx.NetworkXUnfeasible):
             directed_steiner_tree(self.G1, 0, {})
 
-    @pytest.mark.parametrize(
-        "levels, should_raise",
-        [
-            (None, False),
-            (float("inf"), False),
-            (999999, False),
-            (0, True),
-            (-5, True),
-        ],
-    )
-    def test_levels_values(self, levels, should_raise):
-        if should_raise:
-            with pytest.raises(nx.NetworkXError):
-                directed_steiner_tree(self.G2, 0, {1}, levels=levels)
-        else:
-            H = directed_steiner_tree(self.G2, 0, {1}, levels=levels)
-            assert (0, 2) and (2, 1) in H.edges
-
     def test_no_reachable_nodes(self):
         with pytest.raises(nx.NetworkXUnfeasible):
             directed_steiner_tree(self.G1, 0, {3})
@@ -377,4 +359,4 @@ class TestDirectedSteinerTree:
         assert (0, 1) and (0, 2) in H.edges
 
     def test_multidigraph_missing_weight(self):
-        directed_steiner_tree(self.G3, 1, {2, 3}, levels=2, weight="weight")
+        directed_steiner_tree(self.G3, 1, {2, 3}, weight="weight")

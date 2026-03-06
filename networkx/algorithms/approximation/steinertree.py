@@ -268,7 +268,7 @@ def steiner_tree(G, terminal_nodes, weight="weight", method=None):
 
 @nx.utils.not_implemented_for("undirected")
 @nx.utils.not_implemented_for("multigraph")
-def directed_steiner_tree(G, root, terminals, *, levels=None, weight="weight"):
+def directed_steiner_tree(G, root, terminals, *, weight="weight"):
     r"""
     Approximate solution to the Directed Steiner Tree problem.
 
@@ -287,10 +287,6 @@ def directed_steiner_tree(G, root, terminals, *, levels=None, weight="weight"):
         The root node where the algorithm starts growing partial trees.
     terminals : iterable of nodes
         An iterable of terminal nodes. This will be converted to a set.
-    levels : int, optional (default=2)
-        Maximum recursion depth of the algorithm, corresponding to the
-        parameter `i` in Charikar et al. (1999). Larger values improve
-        the approximation guarantee but increase running time rapidly.
     weight : string, optional (default="weight")
         Edge attribute to use as weight.
         If the edge does not have this attribute, the edge weight is assumed to be 1.
@@ -306,34 +302,15 @@ def directed_steiner_tree(G, root, terminals, *, levels=None, weight="weight"):
     Raises
     ------
     NetworkXError
-        If levels is not greater than one or None, or if any terminals are not
-        in ``G``.
+        If if any terminals are not in ``G``.
     NetworkXUnfeasible
         If no terminals are given or if no terminals are reachable from
-        the root within the levels.
+        the root.
 
     Notes
     -----
     - MultiDiGraph inputs are reduced to DiGraph by keeping the minimum-weight
     edge between each node pair. The returned Steiner tree is a DiGraph.
-
-    - This implementation is recursive. If ``levels`` is larger than ~1000,
-    Python's default recursion limit may be exceeded, leading to
-    ``RecursionError``. Consider increasing the recursion limit with
-    ``sys.setrecursionlimit``.
-
-    - The parameter ``levels`` (denoted ``i`` in Charikar et al. (1999))
-    controls a trade-off between approximation ratio and runtime:
-
-    * For any fixed ``levels = i > 1`` the algorithm runs in polynomial time
-        :math:`O(n^i k^{2i})` and achieves an approximation ratio of
-        :math:`(i/(i-1)) \cdot k^{1/i}`.
-    * Setting ``levels = 2`` yields an :math:`O(\sqrt{k})` approximation
-        in polynomial time, which is the most common practical choice.
-    * Setting ``levels = \log k`` achieves the theoretical best
-        :math:`O(\log k)` approximation, but the runtime grows to
-        quasi-polynomial time :math:`n^{O(\log k)}`, which is typically
-        impractical except for very small graphs.
 
     References
     ----------
@@ -349,10 +326,7 @@ def directed_steiner_tree(G, root, terminals, *, levels=None, weight="weight"):
     if not terminals:
         raise nx.NetworkXUnfeasible("No terminals given")
 
-    if levels is None:
-        levels = 2
-    elif levels <= 1:
-        raise nx.NetworkXError("levels must greater than one or None")
+    levels = 2
 
     missing = terminals - set(G.nodes)
     if missing:
