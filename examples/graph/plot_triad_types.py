@@ -34,20 +34,21 @@ triads = {
     "300": [(1, 2), (2, 1), (2, 3), (3, 2), (1, 3), (3, 1)],
 }
 
+plot_opts = {
+    "node_color": "green",
+    "node_size": 200,
+    "edge_arrowsize": 20,
+    "edge_width": 2,
+}
+
 for (title, triad), ax in zip(triads.items(), axes.flatten()):
     G = nx.DiGraph()
     G.add_nodes_from([1, 2, 3])
     G.add_edges_from(triad)
-    nx.draw_networkx(
-        G,
-        ax=ax,
-        with_labels=False,
-        node_color=["green"],
-        node_size=200,
-        arrowsize=20,
-        width=2,
-        pos=nx.planar_layout(G),
-    )
+    nx.set_node_attributes(G, nx.planar_layout(G), name="pos")
+
+    nx.display(G, canvas=ax, node_label=False, **plot_opts)
+
     ax.set_xlim(val * 1.2 for val in ax.get_xlim())
     ax.set_ylim(val * 1.2 for val in ax.get_ylim())
     ax.text(
