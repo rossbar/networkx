@@ -80,9 +80,7 @@ boundary = list(nx.node_boundary(G, shortest_path))
 G.add_nodes_from(shortest_path, color="red")
 G.add_nodes_from(boundary, color="blue")
 H = G.subgraph(shortest_path + boundary)
-colors = nx.get_node_attributes(H, "color")
-options = {"node_size": 1500, "alpha": 0.3, "node_color": colors.values()}
-pos = nx.kamada_kawai_layout(H)
-nx.draw(H, pos, **options)
-nx.draw_networkx_labels(H, pos, font_weight="bold")
+nx.set_node_attributes(H, nx.kamada_kawai_layout(H), name="pos")
+options = {"node_size": 1500, "node_alpha": 0.3, "node_label": {"weight": "bold"}}
+nx.display(H, **options)
 plt.show()
