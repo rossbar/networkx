@@ -34,15 +34,34 @@ layouts_params = {
     },
 }
 
-for i, (name, params) in enumerate(layouts_params.items()):
-    axs[i].title.set_text(name)
-    axs[i].title.set_size(11)
-    axs[i].set_xlabel("Time", size=10)
-    axs[i].margins(0.10)
-    nx.draw_networkx_nodes(G, params.get("pos"), ax=axs[i], alpha=0.5)
-    nx.draw_networkx_labels(G, params.get("pos"), ax=axs[i], labels=labels)
-    nx.draw_networkx_edges(
-        G, **params, ax=axs[i], arrows=True, arrowstyle="<->", arrowsize=10
+# Two different layouts: one emphasizing line-of-sight connectivity and a
+# second for highlighting the time series values
+nx.set_node_attributes(
+    G, {x: (x, 0) for x in range(len(time_series))}, name="Line-of-Sight Connectivity"
+)
+nx.set_node_attributes(
+    G,
+    {n: (n, v) for n, v in enumerate(time_series)},
+    name="Time Series values with Connectivity",
+)
+
+for layout, connectionstyle, ax in zip(
+    ("Line-of-Sight Connectivity", "Time Series values with Connectivity"),
+    ("arc3,rad=-1.57", "arc3"),
+    axs,
+):
+    ax.set_title(layout)
+    ax.margins(0.10)
+    ax.set_xlabel("Time", size=10)
+    nx.display(
+        G,
+        canvas=ax,
+        node_pos=layout,
+        node_alpha=0.5,
+        node_label="value",
+        edge_curvature=connectionstyle,
+        edge_arrowstyle="<->",
+        edge_arrowsize=10,
     )
 
 axs[1].set_ylabel("Value", size=10)
