@@ -73,8 +73,12 @@ options = {
     "node_color": "black",
     "node_size": 1,
     "edge_color": "gray",
-    "linewidths": 0,
-    "width": 0.1,
+    "node_border_width": 0,
+    "edge_width": 0.1,
 }
-nx.draw_circular(UG, **options)
+
+nx.set_node_attributes(UG, nx.circular_layout(G), name="pos")
+# NOTE: edge_label=False doesn't work, so this launches into a very slow
+# lookup of edge labels
+# nx.display(UG, node_label=False, edge_label=False, **options)
 plt.show()
