@@ -100,14 +100,15 @@ print(f"found node {found_node} with centrality {c}")
 
 # Draw graph
 pos = nx.spring_layout(G, seed=seed)
+nx.set_node_attributes(G, pos, name="pos")
 options = {
     "node_color": "blue",
     "node_size": 20,
     "edge_color": "grey",
-    "linewidths": 0,
-    "width": 0.1,
+    "node_border_width": 0,
+    "edge_width": 0.1,
 }
-nx.draw(G, pos, **options)
+nx.display(G, **options)
 # Draw node with high centrality as large and red
 nx.draw_networkx_nodes(G, pos, nodelist=[found_node], node_size=100, node_color="r")
 plt.show()

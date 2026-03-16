@@ -11,6 +11,7 @@ Data from: https://www.inetbio.org/wormnet/downloadnetwork.php
 
 from random import sample
 import networkx as nx
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 
 # Gold standard data of positive gene functional associations
@@ -38,19 +39,24 @@ centrality = nx.betweenness_centrality(H, k=10, endpoints=True)
 lpc = nx.community.label_propagation_communities(H)
 community_index = {n: i for i, com in enumerate(lpc) for n in com}
 
+# Map community index to a color
+node_colormap = mpl.colormaps["viridis"].resampled(max(community_index.values()))
+nx.set_node_attributes(
+    G, {n: node_colormap(v) for n, v in community_index.items()}, name="color"
+)
+
+# Scale nodes by centrality value
+nx.set_node_attributes(G, {n: c * 20000 for n, c in centrality.items()}, name="size")
+
 #### draw graph ####
 fig, ax = plt.subplots(figsize=(20, 15))
 pos = nx.spring_layout(H, k=0.15, seed=4572321)
-node_color = [community_index[n] for n in H]
-node_size = [v * 20000 for v in centrality.values()]
-nx.draw_networkx(
+nx.set_node_attributes(G, pos, name="pos")
+nx.display(
     H,
-    pos=pos,
-    with_labels=False,
-    node_color=node_color,
-    node_size=node_size,
+    node_label=False,
     edge_color="gainsboro",
-    alpha=0.4,
+    node_alpha=0.4,
 )
 
 # Title/legend
